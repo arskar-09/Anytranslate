@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnyTranslate AI - Universal Language & Phonetic Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-blue-500 selection:text-white">
+
+    <!-- Full-Screen Container -->
+    <div class="glass-container w-full min-h-screen flex flex-col" style="font-family: 'Plus Jakarta Sans', sans-serif;">
+
+        <!-- Ambient Background Lights -->
+        <div class="absolute -top-32 -left-32 w-[40rem] h-[40rem] rounded-full bg-blue-600/15 blur-3xl pointer-events-none animate-pulse"></div>
+        <div class="absolute -bottom-32 -right-32 w-[40rem] h-[40rem] rounded-full bg-indigo-600/15 blur-3xl pointer-events-none animate-pulse" style="animation-delay: 2s;"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-purple-600/10 blur-3xl pointer-events-none"></div>
+
+        <!-- Header -->
+        <header class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 px-5 sm:px-8 md:px-12 pt-5 pb-4 border-b border-slate-800/60 relative z-10 shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/20 ring-1 ring-white/20 shrink-0">
+                    <i class="fa-solid fa-language text-2xl text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+                        Any<span class="text-blue-400">Translate</span> <span class="text-xs px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 font-medium ring-1 ring-blue-400/30">Universal Studio</span>
+                    </h1>
+                    <p class="text-xs sm:text-sm text-slate-400">16 Languages • English Pronunciation Guide • Grammar Analysis</p>
+                </div>
+            </div>
+
+            <!-- Quick Action Chips -->
+            <div class="flex items-center gap-2 overflow-x-auto max-w-full pb-1 lg:pb-0 text-xs">
+                <span class="text-slate-400 font-medium whitespace-nowrap">Try:</span>
+                <button class="sample-chip px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/50 text-slate-300 transition-all hover:text-white whitespace-nowrap" data-sample="안녕하세요! 오늘 날씨가 정말 좋네요.">안녕하세요! 오늘 날씨가 좋네요.</button>
+                <button class="sample-chip px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/50 text-slate-300 transition-all hover:text-white whitespace-nowrap" data-sample="Learning languages connects us with the world.">Learning languages connects us.</button>
+                <button class="sample-chip px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/50 text-slate-300 transition-all hover:text-white whitespace-nowrap" data-sample="Hola, ¿cómo estás?">Hola, ¿cómo estás?</button>
+            </div>
+        </header>
+
+        <!-- Main Translation Area -->
+        <main class="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-4 sm:gap-6 relative z-10 px-5 sm:px-8 md:px-12 py-5 flex-grow">
+
+            <!-- Source Panel -->
+            <div class="panel-card bg-slate-900/60 border border-slate-800/90 rounded-2xl p-4 sm:p-5 flex flex-col backdrop-blur-xl transition-all duration-300 focus-within:ring-1 focus-within:ring-blue-500/50 focus-within:border-blue-500/40">
+
+                <!-- Language Selector -->
+                <div class="relative mb-3 z-30" id="source-dropdown-container">
+                    <button id="source-lang-btn" class="lang-selector-btn w-full flex items-center justify-between bg-slate-800/60 hover:bg-slate-800/90 px-4 py-3 rounded-xl transition-all border border-slate-700/50 focus:border-blue-400 focus:outline-none group">
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-earth-americas text-blue-400 text-base"></i>
+                            <span id="source-lang-text" class="font-semibold text-sm sm:text-base text-slate-200">Auto Detect</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400 group-hover:text-slate-200 transition-transform duration-300" id="source-chevron"></i>
+                    </button>
+                    <div id="source-lang-dropdown" class="dropdown-menu hidden absolute top-full mt-2 w-full bg-slate-900/95 backdrop-blur-2xl border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden origin-top opacity-0 transition-all duration-200 transform scale-95 pointer-events-none z-50">
+                        <div class="p-3 border-b border-slate-800">
+                            <div class="relative">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 transform -translate-y-1/2 text-slate-400 text-xs"></i>
+                                <input type="text" id="source-search" placeholder="Search language..." class="w-full bg-slate-950/80 text-slate-200 rounded-xl pl-9 pr-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 transition-shadow">
+                            </div>
+                        </div>
+                        <ul id="source-lang-list" class="max-h-64 overflow-y-auto p-2 custom-scrollbar space-y-1"></ul>
+                    </div>
+                </div>
+
+                <!-- Textarea -->
+                <div class="relative flex-grow flex flex-col">
+                    <textarea id="source-text" class="w-full flex-grow bg-transparent text-slate-100 text-base sm:text-lg resize-none focus:outline-none placeholder-slate-500 custom-scrollbar font-normal leading-relaxed" style="min-height: 200px;" placeholder="번역할 텍스트를 입력하세요... / Type text to translate..."></textarea>
+
+                    <!-- Bottom Controls -->
+                    <div class="flex justify-between items-center text-slate-400 pt-3 mt-2 border-t border-slate-800/80 shrink-0">
+                        <div class="flex items-center gap-2 text-xs font-mono text-slate-500">
+                            <span id="char-count">0</span> / 5000
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button id="tts-source-btn" class="p-2.5 text-slate-400 hover:text-blue-400 hover:bg-slate-800/80 rounded-xl transition-all tooltip" data-tip="원문 음성 듣기">
+                                <i class="fa-solid fa-volume-high text-base"></i>
+                            </button>
+                            <button id="clear-btn" class="p-2.5 text-slate-400 hover:text-rose-400 hover:bg-slate-800/80 rounded-xl transition-all tooltip" data-tip="지우기">
+                                <i class="fa-solid fa-xmark text-base"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Swap Button -->
+            <div class="flex items-center justify-center py-2 lg:py-0">
+                <button id="swap-btn" class="w-12 h-12 rounded-2xl bg-slate-800/90 hover:bg-blue-600/20 hover:text-blue-400 border border-slate-700/60 flex items-center justify-center transition-all hover:rotate-180 hover:scale-110 shadow-xl text-slate-300 focus:outline-none group">
+                    <i class="fa-solid fa-arrow-right-arrow-left text-base group-hover:scale-110 transition-transform"></i>
+                </button>
+            </div>
+
+            <!-- Target Panel -->
+            <div class="panel-card bg-slate-900/60 border border-slate-800/90 rounded-2xl p-4 sm:p-5 flex flex-col backdrop-blur-xl transition-all duration-300">
+
+                <!-- Language Selector -->
+                <div class="relative mb-3 z-20" id="target-dropdown-container">
+                    <button id="target-lang-btn" class="lang-selector-btn w-full flex items-center justify-between bg-slate-800/60 hover:bg-slate-800/90 px-4 py-3 rounded-xl transition-all border border-slate-700/50 focus:border-blue-400 focus:outline-none group">
+                        <div class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-globe text-indigo-400 text-base"></i>
+                            <span id="target-lang-text" class="font-semibold text-sm sm:text-base text-slate-200">Spanish (Español)</span>
+                        </div>
+                        <i class="fa-solid fa-chevron-down text-xs text-slate-400 group-hover:text-slate-200 transition-transform duration-300" id="target-chevron"></i>
+                    </button>
+                    <div id="target-lang-dropdown" class="dropdown-menu hidden absolute top-full mt-2 w-full bg-slate-900/95 backdrop-blur-2xl border border-slate-700/80 rounded-2xl shadow-2xl overflow-hidden origin-top opacity-0 transition-all duration-200 transform scale-95 pointer-events-none z-50">
+                        <div class="p-3 border-b border-slate-800">
+                            <div class="relative">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 transform -translate-y-1/2 text-slate-400 text-xs"></i>
+                                <input type="text" id="target-search" placeholder="Search target language..." class="w-full bg-slate-950/80 text-slate-200 rounded-xl pl-9 pr-3 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 transition-shadow">
+                            </div>
+                        </div>
+                        <ul id="target-lang-list" class="max-h-64 overflow-y-auto p-2 custom-scrollbar space-y-1"></ul>
+                    </div>
+                </div>
+
+                <!-- Translation Output -->
+                <div class="relative flex-grow flex flex-col">
+                    <div class="relative flex-grow">
+                        <textarea id="target-text" readonly class="w-full h-full bg-transparent text-blue-200 text-base sm:text-lg resize-none focus:outline-none placeholder-slate-600 custom-scrollbar font-normal leading-relaxed" style="min-height: 140px;" placeholder="번역 결과가 여기에 표시됩니다..."></textarea>
+                        <!-- Loading Overlay -->
+                        <div id="loading-overlay" class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm hidden flex items-center justify-center rounded-xl z-10">
+                            <div class="flex flex-col items-center gap-3">
+                                <div class="w-10 h-10 rounded-full border-2 border-blue-500 border-t-transparent animate-spin"></div>
+                                <span class="text-blue-300 font-medium text-xs tracking-wider">Translating...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pronunciation Box -->
+                    <div id="target-pronunciation-box" class="mt-3 p-3 bg-indigo-950/50 border border-indigo-500/40 rounded-xl text-xs flex items-center justify-between gap-3 shadow-inner shrink-0">
+                        <div class="flex items-center gap-2 overflow-hidden flex-1 min-w-0">
+                            <span class="text-indigo-300 font-semibold text-xs whitespace-nowrap flex items-center gap-1.5 shrink-0">
+                                <i class="fa-solid fa-volume-low text-indigo-400"></i>
+                                Pronunciation:
+                            </span>
+                            <span id="target-pronunciation-text" class="text-blue-300 font-mono font-medium text-xs sm:text-sm break-all">-</span>
+                        </div>
+                        <button id="copy-target-pron-btn" class="text-slate-300 hover:text-indigo-300 text-xs px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-800 border border-slate-700/50 shrink-0 transition-all tooltip" data-tip="Copy Pronunciation">
+                            <i class="fa-regular fa-copy"></i>
+                        </button>
+                    </div>
+
+                    <!-- Controls -->
+                    <div class="flex justify-between items-center pt-3 mt-2 border-t border-slate-800/80 shrink-0">
+                        <span id="quality-badge" class="text-[11px] px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700/50">Phonetics Ready</span>
+                        <div class="flex items-center gap-1">
+                            <button id="tts-target-btn" class="p-2.5 text-slate-400 hover:text-indigo-400 hover:bg-slate-800/80 rounded-xl transition-all tooltip" data-tip="번역 발음 듣기">
+                                <i class="fa-solid fa-volume-high text-base"></i>
+                            </button>
+                            <button id="copy-btn" class="p-2.5 text-slate-400 hover:text-emerald-400 hover:bg-slate-800/80 rounded-xl transition-all tooltip" data-tip="번역문 복사">
+                                <i class="fa-regular fa-copy text-base"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Insights Section -->
+        <section class="relative z-10 px-5 sm:px-8 md:px-12 pb-5 shrink-0">
+            <div class="border-t border-slate-800/80 pt-4">
+                <!-- Section Tabs -->
+                <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
+                    <div class="flex items-center gap-2 bg-slate-900/80 p-1.5 rounded-xl border border-slate-800">
+                        <button id="tab-pronunciation-btn" class="tab-btn active px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all">
+                            <i class="fa-solid fa-spell-check text-blue-400"></i>
+                            <span>Phonetic Guide (발음 가이드)</span>
+                        </button>
+                        <button id="tab-grammar-btn" class="tab-btn px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all text-slate-400 hover:text-slate-200">
+                            <i class="fa-solid fa-diagram-project text-purple-400"></i>
+                            <span>Grammar (문법 분석)</span>
+                        </button>
+                    </div>
+                    <div class="text-xs text-slate-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-info text-blue-400 text-xs"></i>
+                        <span>영어 발음 가이드 + 문법 분석</span>
+                    </div>
+                </div>
+
+                <!-- Tab: Pronunciation -->
+                <div id="tab-pronunciation" class="tab-content transition-all duration-300">
+                    <div class="bg-slate-900/40 border border-slate-800/90 rounded-2xl p-4 sm:p-5 backdrop-blur-md">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-indigo-400 animate-pulse"></span>
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">English Pronunciation Guide (영어 발음 표기)</h3>
+                            </div>
+                            <button id="copy-pronunciation-btn" class="text-xs text-slate-300 hover:text-blue-300 flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-800 border border-slate-700/50 transition-all">
+                                <i class="fa-regular fa-copy"></i>
+                                <span>Copy</span>
+                            </button>
+                        </div>
+                        <div id="pronunciation-output" class="text-blue-200 text-base sm:text-lg font-mono bg-slate-950/70 p-4 sm:p-5 rounded-xl border border-slate-800/80 leading-relaxed min-h-[60px] flex items-center">
+                            <span class="text-slate-500 italic text-xs sm:text-sm">번역 결과의 영어 발음이 여기에 표시됩니다...</span>
+                        </div>
+                        <div id="pronunciation-note" class="mt-3 flex items-start gap-2 text-xs text-slate-400 bg-indigo-500/10 p-3 rounded-xl border border-indigo-500/20">
+                            <i class="fa-solid fa-lightbulb text-indigo-400 mt-0.5 shrink-0"></i>
+                            <p id="pronunciation-note-text">모든 언어의 번역 결과를 영어 알파벳으로 읽는 법을 보여줍니다. 🔊 버튼으로 원어민 발음도 들을 수 있습니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Grammar -->
+                <div id="tab-grammar" class="tab-content hidden transition-all duration-300">
+                    <div class="bg-slate-900/40 border border-slate-800/90 rounded-2xl p-4 sm:p-5 backdrop-blur-md space-y-4">
+                        <div class="flex items-center justify-between flex-wrap gap-2 pb-3 border-b border-slate-800/80">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2.5 h-2.5 rounded-full bg-purple-400 animate-pulse"></span>
+                                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">Sentence Analysis</h3>
+                            </div>
+                            <div id="grammar-tags-container" class="flex items-center gap-1.5 flex-wrap"></div>
+                        </div>
+                        <div>
+                            <h4 class="text-xs font-semibold text-slate-400 mb-2">Word Breakdown:</h4>
+                            <div id="grammar-tokens-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                                <div class="text-slate-500 italic text-xs col-span-full py-4 text-center">
+                                    문장을 입력하면 문법 분석이 표시됩니다.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-purple-950/20 border border-purple-800/30 p-4 rounded-xl text-xs text-purple-200/90 flex items-start gap-3">
+                            <i class="fa-solid fa-lightbulb text-purple-400 text-sm mt-0.5 shrink-0"></i>
+                            <div>
+                                <span class="font-bold block mb-1 text-purple-300">Structural Insight (문법 포인트)</span>
+                                <p id="grammar-insight-text">문장을 번역하면 어순, 품사 등 문법 구조를 분석해 드립니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Toast -->
+        <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900 text-slate-100 px-5 py-3 rounded-full shadow-2xl flex items-center gap-3 transition-all duration-300 translate-y-20 opacity-0 z-50 border border-slate-700/80 pointer-events-none">
+            <div class="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                <i class="fa-solid fa-check text-emerald-400 text-xs"></i>
+            </div>
+            <span id="toast-msg" class="font-medium text-xs">Copied!</span>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
